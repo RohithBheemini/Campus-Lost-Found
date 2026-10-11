@@ -133,11 +133,11 @@ function renderItemCards(containerId, items, poolType) {
       : "";
 
     const brandChip = item.brand 
-      ? `<span class="meta-chip chip-brand">🏷️ ${item.brand}</span>` 
+      ? `<span class="meta-chip chip-brand">${escapeHtml(item.brand)}</span>` 
       : "";
 
     const colorChip = item.primary_color 
-      ? `<span class="meta-chip chip-color"><span class="color-swatch-mini" style="background-color: ${getColorHex(item.primary_color)}"></span>${item.primary_color}</span>` 
+      ? `<span class="meta-chip chip-color"><span class="color-swatch-mini" style="background-color: ${getColorHex(item.primary_color)}"></span>${escapeHtml(item.primary_color)}</span>` 
       : "";
 
     return `
@@ -156,23 +156,23 @@ function renderItemCards(containerId, items, poolType) {
             <p class="item-desc">${escapeHtml(item.description)}</p>
             
             <div class="item-meta-chips">
-              <span class="meta-chip">📍 ${escapeHtml(item.location)}</span>
+              <span class="meta-chip">${escapeHtml(item.location)}</span>
               ${brandChip}
               ${colorChip}
-              <span class="meta-chip">🕒 ${formatDate(item.date_time)}</span>
+              <span class="meta-chip">${formatDate(item.date_time)}</span>
             </div>
           </div>
 
           <div class="item-card-actions">
             <button class="card-btn card-btn-match" onclick="openMatchExplorer(${item.id})">
-              🎯 AI Auto-Match
+              AI Match
             </button>
             <button class="card-btn" onclick="openItemDetails(${item.id})">
-              👁️ Details
+              Details
             </button>
             ${!isLost && item.status === 'active' ? `
               <button class="card-btn card-btn-claim" onclick="openClaimModal(${item.id})">
-                🛡️ Claim
+                Claim
               </button>
             ` : ''}
           </div>
@@ -183,16 +183,16 @@ function renderItemCards(containerId, items, poolType) {
 }
 
 function getCategoryIcon(cat) {
-  if (!cat) return "📦";
-  if (cat.includes("Electronics")) return "💻";
-  if (cat.includes("ID Cards")) return "🪪";
-  if (cat.includes("Books")) return "📚";
-  if (cat.includes("Bags")) return "🎒";
-  if (cat.includes("Bottles")) return "🧴";
-  if (cat.includes("Keys")) return "🔑";
-  if (cat.includes("Accessories")) return "👓";
-  if (cat.includes("Clothing")) return "🧥";
-  return "📦";
+  if (!cat) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>`;
+  if (cat.includes("Electronics")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
+  if (cat.includes("ID Cards")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>`;
+  if (cat.includes("Books")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+  if (cat.includes("Bags")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M6 20h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"></path><path d="M9 6V4a3 3 0 0 1 6 0v2"></path></svg>`;
+  if (cat.includes("Bottles")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M10 2h4v4h-4z"></path><path d="M8 6h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path></svg>`;
+  if (cat.includes("Keys")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 3 3L22 7"></path></svg>`;
+  if (cat.includes("Accessories")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><circle cx="6" cy="12" r="4"></circle><circle cx="18" cy="12" r="4"></circle><line x1="10" y1="12" x2="14" y2="12"></line></svg>`;
+  if (cat.includes("Clothing")) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path></svg>`;
+  return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>`;
 }
 
 function getColorHex(colorName) {
@@ -216,7 +216,7 @@ function renderRadarLocations(hotspots) {
     return `
       <div class="loc-card ${isSel ? 'active' : ''}" onclick="selectLocationFilter('${escapeHtml(h.location)}')">
         <div class="loc-card-head">
-          <span class="loc-name">📍 ${escapeHtml(h.location)}</span>
+          <span class="loc-name">${escapeHtml(h.location)}</span>
           <span class="loc-zone-tag">${h.total_activity} items</span>
         </div>
         <div class="loc-stats-mini">
@@ -319,7 +319,7 @@ function triggerAIAttributeAutoExtract() {
 
     if (tags.length > 0) {
       if (previewBox) previewBox.style.display = "block";
-      if (tagsRow) tagsRow.innerHTML = tags.map(t => `<span class="ai-tag">✨ ${t}</span>`).join("");
+      if (tagsRow) tagsRow.innerHTML = tags.map(t => `<span class="ai-tag">${escapeHtml(t)}</span>`).join("");
     } else {
       if (previewBox) previewBox.style.display = "none";
     }
@@ -484,10 +484,10 @@ async function openMatchExplorer(itemId) {
         <h3 style="font-size: 1.15rem; margin-bottom: 0.3rem;">${escapeHtml(q.title)}</h3>
         <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 0.5rem;">${escapeHtml(q.description)}</p>
         <div class="item-meta-chips">
-          <span class="meta-chip">🏷️ ${q.brand || 'Unspecified Brand'}</span>
-          <span class="meta-chip">📍 ${q.location}</span>
-          <span class="meta-chip">🎨 ${q.primary_color || 'Color auto-detect'}</span>
-          <span class="meta-chip">🕒 ${formatDate(q.date_time)}</span>
+          <span class="meta-chip">${escapeHtml(q.brand || 'Unspecified Brand')}</span>
+          <span class="meta-chip">${escapeHtml(q.location)}</span>
+          <span class="meta-chip">${escapeHtml(q.primary_color || 'Color auto-detect')}</span>
+          <span class="meta-chip">${formatDate(q.date_time)}</span>
         </div>
       </div>
     `;
@@ -549,7 +549,7 @@ async function openMatchExplorer(itemId) {
             
             ${c.item_type === 'found' && c.status === 'active' ? `
               <button class="card-btn card-btn-claim" style="width: 100%; margin-top: 0.5rem;" onclick="closeMatchModal(); openClaimModal(${c.id});">
-                🛡️ Claim Item
+                Claim Item
               </button>
             ` : ''}
           </div>
@@ -643,13 +643,13 @@ async function submitClaimForm(event) {
     if (res.verification_passed) {
       statusRow.innerHTML = `
         <span class="badge-pill" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); font-weight: 800; font-size: 0.9rem;">
-          ✅ OWNERSHIP VERIFIED (${scorePct}%)
+          [VERIFIED] OWNERSHIP CONFIRMED (${scorePct}%)
         </span>
       `;
       notesText.innerHTML = `
         <strong>Verified!</strong> ${escapeHtml(res.verification_notes)}<br>
         <span style="color: var(--accent-cyan); display: inline-block; margin-top: 0.4rem;">
-          📍 You can collect your item immediately at the Central Security Desk with your ID card (Student ID: ${res.claimant_student_id}).
+          Collection Notice: You can collect your item immediately at the Central Security Desk with your ID card (Student ID: ${escapeHtml(res.claimant_student_id)}).
         </span>
       `;
       showToast("Claim successfully verified!", "success");
@@ -658,7 +658,7 @@ async function submitClaimForm(event) {
       const isUnderReview = res.status === "under_review";
       statusRow.innerHTML = `
         <span class="badge-pill" style="background: ${isUnderReview ? 'rgba(245, 158, 11, 0.2)' : 'rgba(239, 68, 68, 0.2)'}; color: ${isUnderReview ? 'var(--accent-amber)' : 'var(--accent-danger)'}; font-weight: 800; font-size: 0.9rem;">
-          ${isUnderReview ? '⚠️ UNDER MANUAL SECURITY REVIEW' : '❌ VERIFICATION FAILED'} (${scorePct}%)
+          ${isUnderReview ? '[MANUAL REVIEW] UNDER SECURITY REVIEW' : '[FAILED] VERIFICATION REJECTED'} (${scorePct}%)
         </span>
       `;
       notesText.textContent = res.verification_notes;
@@ -686,7 +686,7 @@ async function openItemDetails(itemId) {
     const item = detail.item;
     const history = detail.custody_history || [];
 
-    const distList = (item.distinguishing_features || []).map(f => `<span class="meta-chip">🔹 ${escapeHtml(f)}</span>`).join("");
+    const distList = (item.distinguishing_features || []).map(f => `<span class="meta-chip">${escapeHtml(f)}</span>`).join("");
 
     body.innerHTML = `
       <div style="display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem;">
@@ -723,7 +723,7 @@ async function openItemDetails(itemId) {
           </div>
 
           <div style="margin-bottom: 1rem;">
-            <strong style="font-size: 0.85rem; color: var(--accent-cyan); display: block; margin-bottom: 0.6rem;">⛓️ Chain of Custody & Audit Timeline</strong>
+            <strong style="font-size: 0.85rem; color: var(--accent-cyan); display: block; margin-bottom: 0.6rem;">Chain of Custody & Audit Timeline</strong>
             <div class="custody-timeline">
               ${history.map(h => `
                 <div class="timeline-step">
@@ -790,7 +790,7 @@ async function loadCampusStats() {
         const pct = Math.round((h.total_activity / maxAct) * 100);
         return `
           <tr>
-            <td><strong>📍 ${escapeHtml(h.location)}</strong></td>
+            <td><strong>${escapeHtml(h.location)}</strong></td>
             <td class="text-danger">${h.lost_count}</td>
             <td class="text-success">${h.found_count}</td>
             <td><strong>${h.total_activity}</strong></td>
@@ -833,7 +833,7 @@ async function loadCampusStats() {
 async function triggerEvaluationBenchmark() {
   const btn = document.getElementById("run-eval-btn");
   btn.disabled = true;
-  btn.innerHTML = `<span class="eval-btn-icon">⏳</span> Running Inference Matrix...`;
+  btn.innerHTML = `<span class="eval-btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span> Running Inference Matrix...`;
 
   try {
     const res = await api.getEvaluationMetrics();
@@ -873,7 +873,7 @@ async function triggerEvaluationBenchmark() {
     showToast("Benchmark execution failed", "error");
   } finally {
     btn.disabled = false;
-    btn.innerHTML = `<span class="eval-btn-icon">⚡</span> Run Live Benchmark`;
+    btn.innerHTML = `<span class="eval-btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> Run Live Benchmark`;
   }
 }
 
@@ -920,8 +920,8 @@ function showToast(message, type = "info") {
 
   const toast = document.createElement("div");
   toast.className = `toast toast-${type}`;
-  const icon = type === "success" ? "✅" : (type === "error" ? "❌" : (type === "warning" ? "⚠️" : "ℹ️"));
-  toast.innerHTML = `<span>${icon}</span> <span>${escapeHtml(message)}</span>`;
+  const statusLabel = type === "success" ? "OK" : (type === "error" ? "ERR" : (type === "warning" ? "WARN" : "INFO"));
+  toast.innerHTML = `<span class="badge-pill" style="font-size: 0.72rem; padding: 2px 6px; font-weight: 700;">${statusLabel}</span> <span>${escapeHtml(message)}</span>`;
 
   container.appendChild(toast);
   setTimeout(() => {

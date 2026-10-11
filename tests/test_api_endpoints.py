@@ -7,6 +7,8 @@ client = TestClient(app)
 def test_health_check():
     res = client.get("/health")
     assert res.status_code == 200
+    res_api = client.get("/api/health")
+    assert res_api.status_code == 200
     data = res.json()
     assert data["status"] == "online"
     assert "computer_vision" in data["features"]

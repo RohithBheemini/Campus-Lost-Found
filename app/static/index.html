@@ -29,16 +29,20 @@
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
       <button class="nav-btn active" data-tab="radar-tab">
-        <span class="btn-icon">🗺️</span> 3D Campus Radar
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+        3D Campus Radar
       </button>
       <button class="nav-btn" data-tab="feed-tab">
-        <span class="btn-icon">🔍</span> Items & Matches
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        Items & Matches
       </button>
       <button class="nav-btn" data-tab="insights-tab">
-        <span class="btn-icon">📊</span> Campus Insights
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        Campus Insights
       </button>
       <button class="nav-btn" data-tab="evaluation-tab">
-        <span class="btn-icon">🧪</span> AI Benchmark Lab
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.5 19.5A2 2 0 0 0 6.23 22h11.54a2 2 0 0 0 1.73-2.5L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line><line x1="8" y1="14" x2="16" y2="14"></line></svg>
+        AI Benchmark Lab
       </button>
     </nav>
 
@@ -51,7 +55,7 @@
         <span class="action-plus">+</span> Report Found
       </button>
       <button class="icon-btn" id="notif-btn" onclick="toggleNotifications()" title="Notifications">
-        <span class="icon-bell">🔔</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
         <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
       </button>
     </div>
@@ -82,8 +86,11 @@
               <span>Interactive 3D Spatial Radar</span>
             </div>
             <div class="hud-controls">
-              <button class="hud-btn" onclick="reset3DCamera()" title="Reset Camera View">🔄 Center Map</button>
-              <button class="hud-btn" onclick="toggle3DAutoRotate()" id="rotate-toggle-btn">⏸️ Auto Orbit</button>
+              <button class="hud-btn" onclick="reset3DCamera()" title="Reset Camera View">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                Center Map
+              </button>
+              <button class="hud-btn" onclick="toggle3DAutoRotate()" id="rotate-toggle-btn">Pause Orbit</button>
             </div>
           </div>
           
@@ -92,7 +99,9 @@
           <div class="canvas-hud-bottom" id="building-info-hud">
             <div class="hud-card">
               <div class="hud-title-row">
-                <span class="hud-loc-icon">📍</span>
+                <span class="hud-loc-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </span>
                 <div>
                   <h4 id="hud-building-name">Hover or click a building on the 3D map</h4>
                   <p id="hud-building-zone" class="text-muted">Explore campus zones and item density</p>
@@ -135,9 +144,11 @@
       <!-- Search and Filter Bar -->
       <div class="filter-bar">
         <div class="search-box">
-          <span class="search-icon">🔎</span>
+          <span class="search-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
           <input type="text" id="feed-search-input" placeholder="Search items by keywords, brand, color (e.g. 'Apple', 'casio', 'blue flask')...">
-          <button class="clear-search-btn" onclick="clearFeedSearch()">✕</button>
+          <button class="clear-search-btn" onclick="clearFeedSearch()">&times;</button>
         </div>
 
         <div class="filter-controls">
@@ -212,7 +223,9 @@
         <!-- Top Metric KPI Cards -->
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-icon-wrap bg-cyan-glow">📦</div>
+            <div class="kpi-icon-wrap bg-cyan-glow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            </div>
             <div>
               <p class="kpi-label">Total Reported Items</p>
               <h2 class="kpi-val" id="stat-total-items">0</h2>
@@ -221,7 +234,9 @@
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-icon-wrap bg-danger-glow">⚠️</div>
+            <div class="kpi-icon-wrap bg-danger-glow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
             <div>
               <p class="kpi-label">Active Lost Items</p>
               <h2 class="kpi-val text-danger" id="stat-lost-items">0</h2>
@@ -230,7 +245,9 @@
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-icon-wrap bg-success-glow">🔍</div>
+            <div class="kpi-icon-wrap bg-success-glow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
             <div>
               <p class="kpi-label">Found In Custody</p>
               <h2 class="kpi-val text-success" id="stat-found-items">0</h2>
@@ -239,7 +256,9 @@
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-icon-wrap bg-purple-glow">🎯</div>
+            <div class="kpi-icon-wrap bg-blue-glow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+            </div>
             <div>
               <p class="kpi-label">Recovery Resolution Rate</p>
               <h2 class="kpi-val text-cyan" id="stat-recovery-rate">0%</h2>
@@ -253,7 +272,7 @@
           <!-- Hotspots Table Card -->
           <div class="insight-card full-width">
             <div class="card-head">
-              <h3>📍 Campus Zone Hotspots & Risk Index</h3>
+              <h3>Campus Zone Hotspots & Risk Index</h3>
               <span class="card-badge">Real-Time Aggregates</span>
             </div>
             <div class="table-responsive">
@@ -278,7 +297,7 @@
           <!-- Category Breakdown Card -->
           <div class="insight-card">
             <div class="card-head">
-              <h3>🏷️ Category Breakdown</h3>
+              <h3>Category Breakdown</h3>
               <span class="card-badge">Item Distribution</span>
             </div>
             <div class="category-bars" id="category-bars-list">
@@ -289,26 +308,32 @@
           <!-- Intelligence Tips Card -->
           <div class="insight-card">
             <div class="card-head">
-              <h3>🛡️ Campus Recovery Intelligence</h3>
+              <h3>Campus Recovery Intelligence</h3>
               <span class="card-badge">Automated Suggestions</span>
             </div>
             <div class="intelligence-tips">
               <div class="tip-item">
-                <span class="tip-icon">💡</span>
+                <span class="tip-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </span>
                 <div>
                   <strong>Peak Loss Window</strong>
                   <p>Library study desks and Cafeteria register areas experience peak item loss between 12:00 PM – 3:30 PM on weekdays.</p>
                 </div>
               </div>
               <div class="tip-item">
-                <span class="tip-icon">⚡</span>
+                <span class="tip-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </span>
                 <div>
                   <strong>Image Multi-Modal Impact</strong>
                   <p>Items reported with photos achieve a 3.4× higher matching confidence score and 2.1× faster return rate.</p>
                 </div>
               </div>
               <div class="tip-item">
-                <span class="tip-icon">🔐</span>
+                <span class="tip-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
                 <div>
                   <strong>Secret Challenge Shielding</strong>
                   <p>Automated verification protects student privacy by verifying serial digits and hidden stickers before revealing owner contacts.</p>
@@ -325,11 +350,13 @@
       <div class="eval-container">
         <div class="eval-banner">
           <div class="eval-banner-text">
-            <h2>🧠 AI/ML Multi-Modal Evaluation Benchmark Suite</h2>
+            <h2>AI/ML Multi-Modal Evaluation Benchmark Suite</h2>
             <p>Empirical evaluation assessing Top-K accuracy, Precision@K, Recall@K, Mean Reciprocal Rank (MRR), and inference latency over ground-truth campus pairs and distractor pools.</p>
           </div>
           <button class="eval-run-btn" id="run-eval-btn" onclick="triggerEvaluationBenchmark()">
-            <span class="eval-btn-icon">⚡</span> Run Live Benchmark
+            <span class="eval-btn-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </span> Run Live Benchmark
           </button>
         </div>
 
@@ -347,7 +374,7 @@
           </div>
           <div class="eval-metric-card">
             <span class="metric-title">Mean Reciprocal Rank (MRR)</span>
-            <div class="metric-val text-purple" id="eval-mrr">-</div>
+            <div class="metric-val text-sky" id="eval-mrr">-</div>
             <span class="metric-sub">Mean of 1 / True Rank</span>
           </div>
           <div class="eval-metric-card">
@@ -370,7 +397,7 @@
         <!-- Benchmark Details Breakdown -->
         <div class="benchmark-details-card">
           <div class="card-head">
-            <h3>🔬 Detailed Ground-Truth Query Test Matrix</h3>
+            <h3>Detailed Ground-Truth Query Test Matrix</h3>
             <span class="card-badge" id="eval-dataset-meta">Dataset: 8 Test Queries vs 13 Candidates Pool</span>
           </div>
           <div class="table-responsive">
@@ -402,7 +429,7 @@
     <div class="modal-card">
       <div class="modal-header">
         <h3 id="report-modal-title">Report Item</h3>
-        <button class="modal-close" onclick="closeReportModal()">✕</button>
+        <button class="modal-close" onclick="closeReportModal()">&times;</button>
       </div>
       <form id="report-form" onsubmit="submitReportForm(event)">
         <input type="hidden" id="report-item-type" value="lost">
@@ -416,7 +443,7 @@
           <div class="form-group full-col">
             <label>Detailed Description *</label>
             <textarea id="report-description" rows="3" placeholder="Describe the item, colors, unique stickers, scratches, case, where you lost or found it..." required oninput="triggerAIAttributeAutoExtract()"></textarea>
-            <span class="form-tip">🤖 AI automatically extracts category, brand, colors, and distinguishing features as you type!</span>
+            <span class="form-tip">AI automatically extracts category, brand, colors, and distinguishing features as you type.</span>
           </div>
 
           <!-- AI Auto-Extracted Preview Badge Bar -->
@@ -501,7 +528,9 @@
           <!-- Secret Ownership Challenge -->
           <div class="form-group full-col challenge-box">
             <div class="challenge-head">
-              <span class="icon-lock">🔒</span>
+              <span class="icon-lock">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </span>
               <strong>Automated Ownership Verification Challenge (Private)</strong>
             </div>
             <p class="challenge-sub">Specify a hidden challenge question that ONLY the true owner can answer. The answer will remain private and will be used by our AI to automatically verify claims.</p>
@@ -518,7 +547,9 @@
             <div class="drop-zone" id="drop-zone" onclick="document.getElementById('report-image-input').click()">
               <input type="file" id="report-image-input" accept="image/*" style="display:none;" onchange="handleImageSelection(event)">
               <div class="drop-zone-content" id="drop-zone-content">
-                <span class="upload-icon">📷</span>
+                <span class="upload-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                </span>
                 <p>Click or drag & drop an image here</p>
                 <span class="upload-sub">Supports PNG, JPG, WEBP. AI extracts dominant colors, shapes & embeddings.</span>
               </div>
@@ -548,7 +579,7 @@
           <span class="radar-ping"></span>
           <h3>AI Multi-Modal Match Explorer</h3>
         </div>
-        <button class="modal-close" onclick="closeMatchModal()">✕</button>
+        <button class="modal-close" onclick="closeMatchModal()">&times;</button>
       </div>
 
       <div class="match-modal-body">
@@ -575,10 +606,12 @@
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-title-wrap">
-          <span class="icon-shield">🛡️</span>
+          <span class="icon-shield">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </span>
           <h3>Automated Claim Verification</h3>
         </div>
-        <button class="modal-close" onclick="closeClaimModal()">✕</button>
+        <button class="modal-close" onclick="closeClaimModal()">&times;</button>
       </div>
 
       <form id="claim-form" onsubmit="submitClaimForm(event)">
@@ -648,7 +681,7 @@
     <div class="modal-card modal-large">
       <div class="modal-header">
         <h3 id="detail-modal-title">Item Details & Custody Chain</h3>
-        <button class="modal-close" onclick="closeDetailModal()">✕</button>
+        <button class="modal-close" onclick="closeDetailModal()">&times;</button>
       </div>
 
       <div class="detail-modal-body" id="detail-modal-body">

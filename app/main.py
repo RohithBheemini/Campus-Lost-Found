@@ -50,6 +50,7 @@ def serve_index():
     return FileResponse(str(index_file))
 
 @app.get("/health")
+@app.get("/api/health")
 def health_check():
     return {
         "status": "online",

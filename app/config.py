@@ -14,7 +14,7 @@ os.makedirs(SAMPLE_IMG_DIR, exist_ok=True)
 # Campus Locations with 3D coordinates (x, z) on the campus plane
 CAMPUS_LOCATIONS = {
     "Central Library": {"x": -25, "z": -20, "zone": "Academic", "color": "#3b82f6"},
-    "Tech Hub / Engineering Block": {"x": 25, "z": -25, "zone": "Engineering", "color": "#8b5cf6"},
+    "Tech Hub / Engineering Block": {"x": 25, "z": -25, "zone": "Engineering", "color": "#0284c7"},
     "Science Hall": {"x": 40, "z": 10, "zone": "Sciences", "color": "#10b981"},
     "Student Center & Union": {"x": 0, "z": 0, "zone": "Student Life", "color": "#f59e0b"},
     "Campus Cafeteria & Food Court": {"x": -35, "z": 15, "zone": "Dining", "color": "#ef4444"},

@@ -1,11 +1,11 @@
-# 🌐 OmniFind AI — Campus Lost & Found Intelligence Platform
+# OmniFind AI — Campus Lost & Found Intelligence Platform
 
 > **Category**: AI/ML & Data Science • Problem Statement 1  
 > **Architecture**: Multi-Modal Computer Vision + NLP Entity Extraction + Three.js 3D Spatial Radar + Automated Claim Verification + SQLite
 
 ---
 
-## 🌟 Executive Summary
+## Executive Summary
 
 Every day on university campuses, students lose vital personal belongings — laptops, ID cards, textbooks, calculators, water flasks, and keys. Traditional campus lost and founds rely on chaotic bulletin boards or static WhatsApp/Discord groups, where manual matching is sluggish and erroneous, and bad actors can falsely claim valuable gadgets.
 
@@ -19,7 +19,7 @@ Every day on university campuses, students lose vital personal belongings — la
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```
 Campus Lost&Found/
@@ -63,7 +63,7 @@ Campus Lost&Found/
 
 ---
 
-## 🧠 AI/ML Technical Details
+## AI/ML Technical Details
 
 ### 1. Multi-Modal Matching Formula
 The overall match confidence between a query item $Q$ and candidate item $C$ is computed as:
@@ -80,7 +80,7 @@ Where:
 
 ---
 
-## 📊 Empirical Evaluation Benchmark Results
+## Empirical Evaluation Benchmark Results
 
 Running `python run_evaluation.py` executes our empirical benchmark over ground-truth pairs and distractor pools:
 
@@ -97,7 +97,7 @@ Running `python run_evaluation.py` executes our empirical benchmark over ground-
 
 ---
 
-## 🛡️ Automated Claim Verification Mechanism
+## Automated Claim Verification Mechanism
 
 To prevent false claims of valuable items (e.g., MacBooks, wallets, jewelry), OmniFind AI incorporates a private challenge verification mechanism:
 1. **Secret Challenge Prompt**: At report time, the reporter specifies a private attribute challenge (e.g., *"What sticker is on the laptop lid?"*, *"Last 3 digits of student roll number"*).
@@ -113,7 +113,7 @@ To prevent false claims of valuable items (e.g., MacBooks, wallets, jewelry), Om
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ### 1. Install Dependencies
 The project uses standard Python packages (`fastapi`, `uvicorn`, `torch`, `opencv-python`, `scikit-learn`, `pillow`, `pytest`).

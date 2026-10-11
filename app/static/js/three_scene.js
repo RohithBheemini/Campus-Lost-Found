@@ -29,8 +29,8 @@ const CAMPUS_BUILDING_SPECS = [
     name: "Tech Hub / Engineering Block",
     x: 25, z: -25,
     width: 18, height: 22, depth: 14,
-    color: 0x8b5cf6,
-    roofColor: 0xa78bfa,
+    color: 0x0284c7,
+    roofColor: 0x38bdf8,
     zone: "Engineering / Hardware Labs"
   },
   {
@@ -117,9 +117,9 @@ function init3DCampusScene() {
   pointLightCenter.position.set(0, 20, 0);
   campusScene.add(pointLightCenter);
 
-  const pointLightPurple = new THREE.PointLight(0x8b5cf6, 2.0, 120);
-  pointLightPurple.position.set(30, 25, -20);
-  campusScene.add(pointLightPurple);
+  const pointLightSky = new THREE.PointLight(0x0284c7, 2.0, 120);
+  pointLightSky.position.set(30, 25, -20);
+  campusScene.add(pointLightSky);
 
   // 5. Ground Cyber-Grid & Terrain
   createCampusGround();
@@ -464,7 +464,7 @@ function toggle3DAutoRotate() {
   isAutoRotating = !isAutoRotating;
   const btn = document.getElementById("rotate-toggle-btn");
   if (btn) {
-    btn.textContent = isAutoRotating ? "⏸️ Auto Orbit" : "▶️ Auto Orbit";
+    btn.textContent = isAutoRotating ? "Pause Orbit" : "Resume Orbit";
   }
 }
 
@@ -596,7 +596,7 @@ function render3DItemHologram(containerId, category, brand, primaryColor) {
 
   // Scanner grid ring
   const gridRingGeo = new THREE.RingGeometry(1.2, 1.3, 32);
-  const gridRingMat = new THREE.MeshBasicMaterial({ color: 0x8b5cf6, side: THREE.DoubleSide });
+  const gridRingMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide });
   const gridRing = new THREE.Mesh(gridRingGeo, gridRingMat);
   gridRing.rotation.x = Math.PI / 2;
   hScene.add(gridRing);
