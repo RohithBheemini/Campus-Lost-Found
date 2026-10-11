@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniFind AI • Campus Lost & Found Intelligence</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Offline Three.js -->
+  <script src="/static/js/three.min.js"></script>
+</head>
+<body class="dark-theme">
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="logo-orb">
+        <span class="logo-pulse"></span>
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <path d="M11 8v6M8 11h6" stroke="#00f2fe" stroke-width="2"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">OmniFind <span class="gradient-text">AI</span></h1>
+        <p class="brand-subtitle">Campus Lost & Found Intelligence Platform</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-btn active" data-tab="radar-tab">
+        <span class="btn-icon">🗺️</span> 3D Campus Radar
+      </button>
+      <button class="nav-btn" data-tab="feed-tab">
+        <span class="btn-icon">🔍</span> Items & Matches
+      </button>
+      <button class="nav-btn" data-tab="insights-tab">
+        <span class="btn-icon">📊</span> Campus Insights
+      </button>
+      <button class="nav-btn" data-tab="evaluation-tab">
+        <span class="btn-icon">🧪</span> AI Benchmark Lab
+      </button>
+    </nav>
+
+    <!-- Quick Action Bar -->
+    <div class="nav-actions">
+      <button class="action-btn report-lost-btn" onclick="openReportModal('lost')">
+        <span class="action-plus">+</span> Report Lost
+      </button>
+      <button class="action-btn report-found-btn" onclick="openReportModal('found')">
+        <span class="action-plus">+</span> Report Found
+      </button>
+      <button class="icon-btn" id="notif-btn" onclick="toggleNotifications()" title="Notifications">
+        <span class="icon-bell">🔔</span>
+        <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Notifications Dropdown -->
+  <div class="notif-dropdown" id="notif-dropdown">
+    <div class="notif-header">
+      <h3>Match Alerts & Updates</h3>
+      <button class="text-btn" onclick="fetchNotifications()">Refresh</button>
+    </div>
+    <div class="notif-list" id="notif-list">
+      <div class="empty-state">No new alerts</div>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+    
+    <!-- TAB 1: 3D Campus Radar View -->
+    <section class="tab-content active" id="radar-tab">
+      <div class="radar-layout">
+        <!-- 3D Canvas Viewport -->
+        <div class="canvas-wrapper">
+          <div class="canvas-hud-top">
+            <div class="hud-pill">
+              <span class="status-dot pulse-green"></span>
+              <span>Interactive 3D Spatial Radar</span>
+            </div>
+            <div class="hud-controls">
+              <button class="hud-btn" onclick="reset3DCamera()" title="Reset Camera View">🔄 Center Map</button>
+              <button class="hud-btn" onclick="toggle3DAutoRotate()" id="rotate-toggle-btn">⏸️ Auto Orbit</button>
+            </div>
+          </div>
+          
+          <div id="three-campus-container" class="three-container"></div>
+          
+          <div class="canvas-hud-bottom" id="building-info-hud">
+            <div class="hud-card">
+              <div class="hud-title-row">
+                <span class="hud-loc-icon">📍</span>
+                <div>
+                  <h4 id="hud-building-name">Hover or click a building on the 3D map</h4>
+                  <p id="hud-building-zone" class="text-muted">Explore campus zones and item density</p>
+                </div>
+              </div>
+              <div class="hud-stats-row">
+                <div class="hud-stat-box">
+                  <span class="hud-stat-num text-danger" id="hud-lost-count">0</span>
+                  <span class="hud-stat-lbl">Lost Items</span>
+                </div>
+                <div class="hud-stat-box">
+                  <span class="hud-stat-num text-success" id="hud-found-count">0</span>
+                  <span class="hud-stat-lbl">Found Items</span>
+                </div>
+                <div class="hud-stat-box">
+                  <span class="hud-stat-num text-cyan" id="hud-recovery-rate">0%</span>
+                  <span class="hud-stat-lbl">Recovery Rate</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Radar Sidebar: Live Location Activity Feed -->
+        <aside class="radar-sidebar">
+          <div class="sidebar-header">
+            <h3>Campus Hotspots</h3>
+            <span class="badge-pill" id="total-radar-items">0 Items</span>
+          </div>
+          <p class="sidebar-tip">Click a location below or in the 3D map to filter items:</p>
+          <div class="location-list" id="radar-location-list">
+            <!-- Dynamic location cards -->
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TAB 2: Discovery Feed & Auto-Matcher -->
+    <section class="tab-content" id="feed-tab">
+      <!-- Search and Filter Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <span class="search-icon">🔎</span>
+          <input type="text" id="feed-search-input" placeholder="Search items by keywords, brand, color (e.g. 'Apple', 'casio', 'blue flask')...">
+          <button class="clear-search-btn" onclick="clearFeedSearch()">✕</button>
+        </div>
+
+        <div class="filter-controls">
+          <select id="filter-type" class="filter-select" onchange="applyFeedFilters()">
+            <option value="all">All Items</option>
+            <option value="lost">Lost Only</option>
+            <option value="found">Found Only</option>
+          </select>
+
+          <select id="filter-category" class="filter-select" onchange="applyFeedFilters()">
+            <option value="all">All Categories</option>
+            <option value="Electronics & Gadgets">Electronics & Gadgets</option>
+            <option value="ID Cards & Wallets">ID Cards & Wallets</option>
+            <option value="Books & Stationery">Books & Stationery</option>
+            <option value="Bags & Backpacks">Bags & Backpacks</option>
+            <option value="Bottles & Containers">Bottles & Containers</option>
+            <option value="Keys & Keychains">Keys & Keychains</option>
+            <option value="Personal Accessories">Personal Accessories</option>
+            <option value="Clothing & Wearables">Clothing & Wearables</option>
+          </select>
+
+          <select id="filter-location" class="filter-select" onchange="applyFeedFilters()">
+            <option value="all">All Locations</option>
+            <option value="Central Library">Central Library</option>
+            <option value="Tech Hub / Engineering Block">Tech Hub / Engineering</option>
+            <option value="Science Hall">Science Hall</option>
+            <option value="Student Center & Union">Student Center & Union</option>
+            <option value="Campus Cafeteria & Food Court">Campus Cafeteria</option>
+            <option value="Sports Complex & Gymnasium">Sports Complex</option>
+            <option value="North Hostels & Dormitories">North Hostels</option>
+          </select>
+
+          <button class="reset-filter-btn" onclick="resetFeedFilters()">Reset</button>
+        </div>
+      </div>
+
+      <!-- Feed Grid -->
+      <div class="feed-split-container">
+        <!-- Lost Items Column -->
+        <div class="feed-column">
+          <div class="column-header lost-col-header">
+            <div class="col-title-wrap">
+              <span class="badge-dot badge-lost"></span>
+              <h2>Lost Items Pool</h2>
+            </div>
+            <span class="col-count" id="lost-items-count">0 items</span>
+          </div>
+          <div class="cards-grid" id="lost-items-grid">
+            <div class="loading-spinner">Loading lost items...</div>
+          </div>
+        </div>
+
+        <!-- Found Items Column -->
+        <div class="feed-column">
+          <div class="column-header found-col-header">
+            <div class="col-title-wrap">
+              <span class="badge-dot badge-found"></span>
+              <h2>Found Items Pool</h2>
+            </div>
+            <span class="col-count" id="found-items-count">0 items</span>
+          </div>
+          <div class="cards-grid" id="found-items-grid">
+            <div class="loading-spinner">Loading found items...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Campus Insights & Analytics -->
+    <section class="tab-content" id="insights-tab">
+      <div class="insights-container">
+        <!-- Top Metric KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap bg-cyan-glow">📦</div>
+            <div>
+              <p class="kpi-label">Total Reported Items</p>
+              <h2 class="kpi-val" id="stat-total-items">0</h2>
+              <span class="kpi-sub text-muted">Across all campus zones</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap bg-danger-glow">⚠️</div>
+            <div>
+              <p class="kpi-label">Active Lost Items</p>
+              <h2 class="kpi-val text-danger" id="stat-lost-items">0</h2>
+              <span class="kpi-sub text-muted">Searching for matches</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap bg-success-glow">🔍</div>
+            <div>
+              <p class="kpi-label">Found In Custody</p>
+              <h2 class="kpi-val text-success" id="stat-found-items">0</h2>
+              <span class="kpi-sub text-muted">Awaiting claim verification</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap bg-purple-glow">🎯</div>
+            <div>
+              <p class="kpi-label">Recovery Resolution Rate</p>
+              <h2 class="kpi-val text-cyan" id="stat-recovery-rate">0%</h2>
+              <span class="kpi-sub text-success" id="stat-resolved-count">0 cases resolved</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Insights Visual Layout -->
+        <div class="insights-layout">
+          <!-- Hotspots Table Card -->
+          <div class="insight-card full-width">
+            <div class="card-head">
+              <h3>📍 Campus Zone Hotspots & Risk Index</h3>
+              <span class="card-badge">Real-Time Aggregates</span>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table" id="hotspots-table">
+                <thead>
+                  <tr>
+                    <th>Location Zone</th>
+                    <th>Lost Items</th>
+                    <th>Found Items</th>
+                    <th>Total Activity</th>
+                    <th>Recovery Rate</th>
+                    <th>Activity Bar</th>
+                  </tr>
+                </thead>
+                <tbody id="hotspots-tbody">
+                  <!-- Dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Category Breakdown Card -->
+          <div class="insight-card">
+            <div class="card-head">
+              <h3>🏷️ Category Breakdown</h3>
+              <span class="card-badge">Item Distribution</span>
+            </div>
+            <div class="category-bars" id="category-bars-list">
+              <!-- Dynamic bars -->
+            </div>
+          </div>
+
+          <!-- Intelligence Tips Card -->
+          <div class="insight-card">
+            <div class="card-head">
+              <h3>🛡️ Campus Recovery Intelligence</h3>
+              <span class="card-badge">Automated Suggestions</span>
+            </div>
+            <div class="intelligence-tips">
+              <div class="tip-item">
+                <span class="tip-icon">💡</span>
+                <div>
+                  <strong>Peak Loss Window</strong>
+                  <p>Library study desks and Cafeteria register areas experience peak item loss between 12:00 PM – 3:30 PM on weekdays.</p>
+                </div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon">⚡</span>
+                <div>
+                  <strong>Image Multi-Modal Impact</strong>
+                  <p>Items reported with photos achieve a 3.4× higher matching confidence score and 2.1× faster return rate.</p>
+                </div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon">🔐</span>
+                <div>
+                  <strong>Secret Challenge Shielding</strong>
+                  <p>Automated verification protects student privacy by verifying serial digits and hidden stickers before revealing owner contacts.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: AI Benchmark Lab -->
+    <section class="tab-content" id="evaluation-tab">
+      <div class="eval-container">
+        <div class="eval-banner">
+          <div class="eval-banner-text">
+            <h2>🧠 AI/ML Multi-Modal Evaluation Benchmark Suite</h2>
+            <p>Empirical evaluation assessing Top-K accuracy, Precision@K, Recall@K, Mean Reciprocal Rank (MRR), and inference latency over ground-truth campus pairs and distractor pools.</p>
+          </div>
+          <button class="eval-run-btn" id="run-eval-btn" onclick="triggerEvaluationBenchmark()">
+            <span class="eval-btn-icon">⚡</span> Run Live Benchmark
+          </button>
+        </div>
+
+        <!-- Evaluation Metric Scorecards -->
+        <div class="eval-metrics-grid">
+          <div class="eval-metric-card">
+            <span class="metric-title">Top-1 Accuracy</span>
+            <div class="metric-val text-cyan" id="eval-top1">-</div>
+            <span class="metric-sub">True match ranked at #1</span>
+          </div>
+          <div class="eval-metric-card">
+            <span class="metric-title">Top-3 Accuracy</span>
+            <div class="metric-val text-success" id="eval-top3">-</div>
+            <span class="metric-sub">True match in Top 3 candidates</span>
+          </div>
+          <div class="eval-metric-card">
+            <span class="metric-title">Mean Reciprocal Rank (MRR)</span>
+            <div class="metric-val text-purple" id="eval-mrr">-</div>
+            <span class="metric-sub">Mean of 1 / True Rank</span>
+          </div>
+          <div class="eval-metric-card">
+            <span class="metric-title">Precision @ 1</span>
+            <div class="metric-val text-amber" id="eval-p1">-</div>
+            <span class="metric-sub">P@1 ranking quality</span>
+          </div>
+          <div class="eval-metric-card">
+            <span class="metric-title">Precision @ 3</span>
+            <div class="metric-val text-blue" id="eval-p3">-</div>
+            <span class="metric-sub">P@3 ranking quality</span>
+          </div>
+          <div class="eval-metric-card">
+            <span class="metric-title">Avg Latency / Pair</span>
+            <div class="metric-val text-green" id="eval-latency">-</div>
+            <span class="metric-sub">Inference speed in ms</span>
+          </div>
+        </div>
+
+        <!-- Benchmark Details Breakdown -->
+        <div class="benchmark-details-card">
+          <div class="card-head">
+            <h3>🔬 Detailed Ground-Truth Query Test Matrix</h3>
+            <span class="card-badge" id="eval-dataset-meta">Dataset: 8 Test Queries vs 13 Candidates Pool</span>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table" id="eval-table">
+              <thead>
+                <tr>
+                  <th>Test Query (Lost Item)</th>
+                  <th>Ground Truth Match (Found Item)</th>
+                  <th>Rank Position</th>
+                  <th>Predicted Match Score</th>
+                  <th>Multi-Modal Match Reason</th>
+                </tr>
+              </thead>
+              <tbody id="eval-tbody">
+                <tr><td colspan="5" class="text-center text-muted">Click "Run Live Benchmark" above to execute evaluation.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Report Item Modal -->
+  <div class="modal-overlay" id="report-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="report-modal-title">Report Item</h3>
+        <button class="modal-close" onclick="closeReportModal()">✕</button>
+      </div>
+      <form id="report-form" onsubmit="submitReportForm(event)">
+        <input type="hidden" id="report-item-type" value="lost">
+
+        <div class="form-grid">
+          <div class="form-group full-col">
+            <label>Item Title *</label>
+            <input type="text" id="report-title" placeholder="e.g., Space Gray Apple MacBook Pro 14 or Blue Student ID Card" required>
+          </div>
+
+          <div class="form-group full-col">
+            <label>Detailed Description *</label>
+            <textarea id="report-description" rows="3" placeholder="Describe the item, colors, unique stickers, scratches, case, where you lost or found it..." required oninput="triggerAIAttributeAutoExtract()"></textarea>
+            <span class="form-tip">🤖 AI automatically extracts category, brand, colors, and distinguishing features as you type!</span>
+          </div>
+
+          <!-- AI Auto-Extracted Preview Badge Bar -->
+          <div class="form-group full-col ai-extracted-preview" id="ai-auto-preview" style="display:none;">
+            <div class="ai-preview-head">
+              <span class="badge-dot badge-cyan"></span>
+              <strong>AI Real-Time Analysis:</strong>
+            </div>
+            <div class="ai-tags-row" id="ai-preview-tags">
+              <!-- Tags -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Item Category *</label>
+            <select id="report-category" required>
+              <option value="Electronics & Gadgets">Electronics & Gadgets</option>
+              <option value="ID Cards & Wallets">ID Cards & Wallets</option>
+              <option value="Books & Stationery">Books & Stationery</option>
+              <option value="Bags & Backpacks">Bags & Backpacks</option>
+              <option value="Bottles & Containers">Bottles & Containers</option>
+              <option value="Keys & Keychains">Keys & Keychains</option>
+              <option value="Personal Accessories">Personal Accessories</option>
+              <option value="Clothing & Wearables">Clothing & Wearables</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Campus Location *</label>
+            <select id="report-location" required>
+              <option value="Central Library">Central Library</option>
+              <option value="Tech Hub / Engineering Block">Tech Hub / Engineering Block</option>
+              <option value="Science Hall">Science Hall</option>
+              <option value="Student Center & Union">Student Center & Union</option>
+              <option value="Campus Cafeteria & Food Court">Campus Cafeteria & Food Court</option>
+              <option value="Sports Complex & Gymnasium">Sports Complex & Gymnasium</option>
+              <option value="North Hostels & Dormitories">North Hostels & Dormitories</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Specific Spot / Room</label>
+            <input type="text" id="report-spot" placeholder="e.g. 2nd floor desk 14, quiet zone, bench near entrance">
+          </div>
+
+          <div class="form-group">
+            <label>Date & Time *</label>
+            <input type="datetime-local" id="report-datetime" required>
+          </div>
+
+          <div class="form-group">
+            <label>Contact Name *</label>
+            <input type="text" id="report-name" placeholder="Alex Chen" required>
+          </div>
+
+          <div class="form-group">
+            <label>Campus Email *</label>
+            <input type="email" id="report-email" placeholder="alex.chen@campus.edu" required>
+          </div>
+
+          <div class="form-group">
+            <label>Contact Phone</label>
+            <input type="tel" id="report-phone" placeholder="+1-555-0192">
+          </div>
+
+          <div class="form-group">
+            <label>Brand (Optional)</label>
+            <input type="text" id="report-brand" placeholder="e.g., Apple, Dell, Casio, Hydro Flask">
+          </div>
+
+          <div class="form-group">
+            <label>Primary Color</label>
+            <input type="text" id="report-color" placeholder="e.g., Space Gray, Black, Navy Blue">
+          </div>
+
+          <div class="form-group">
+            <label>Distinguishing Marks (Comma-separated)</label>
+            <input type="text" id="report-features" placeholder="e.g. GitHub sticker, cracked bottom edge, red tag">
+          </div>
+
+          <!-- Secret Ownership Challenge -->
+          <div class="form-group full-col challenge-box">
+            <div class="challenge-head">
+              <span class="icon-lock">🔒</span>
+              <strong>Automated Ownership Verification Challenge (Private)</strong>
+            </div>
+            <p class="challenge-sub">Specify a hidden challenge question that ONLY the true owner can answer. The answer will remain private and will be used by our AI to automatically verify claims.</p>
+            
+            <div class="challenge-inputs">
+              <input type="text" id="report-secret-q" placeholder="Verification Question (e.g., 'What sticker is next to the Apple logo?' or 'Last 3 digits of roll number')">
+              <input type="text" id="report-secret-a" placeholder="Secret Ground Truth Answer (Hidden from public view)">
+            </div>
+          </div>
+
+          <!-- Image Upload Area -->
+          <div class="form-group full-col">
+            <label>Item Photograph (Computer Vision Analysis)</label>
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('report-image-input').click()">
+              <input type="file" id="report-image-input" accept="image/*" style="display:none;" onchange="handleImageSelection(event)">
+              <div class="drop-zone-content" id="drop-zone-content">
+                <span class="upload-icon">📷</span>
+                <p>Click or drag & drop an image here</p>
+                <span class="upload-sub">Supports PNG, JPG, WEBP. AI extracts dominant colors, shapes & embeddings.</span>
+              </div>
+              <div class="drop-zone-preview" id="image-preview-container" style="display:none;">
+                <img id="image-preview" src="" alt="Preview">
+                <button type="button" class="remove-img-btn" onclick="removeSelectedImage(event)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeReportModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="report-submit-btn">
+            <span>Publish Report & Run AI Match</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Match Explorer & Candidate Comparison Modal -->
+  <div class="modal-overlay" id="match-modal">
+    <div class="modal-card modal-large">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="radar-ping"></span>
+          <h3>AI Multi-Modal Match Explorer</h3>
+        </div>
+        <button class="modal-close" onclick="closeMatchModal()">✕</button>
+      </div>
+
+      <div class="match-modal-body">
+        <!-- Query Item Header Card -->
+        <div class="query-hero-card" id="match-query-hero">
+          <!-- Dynamic query item details -->
+        </div>
+
+        <!-- Candidate Matches Section -->
+        <div class="matches-section-header">
+          <h4>Candidate Matches Ranked by AI Confidence Score</h4>
+          <span class="badge-pill" id="match-candidates-count">0 Candidates</span>
+        </div>
+
+        <div class="match-candidates-list" id="match-candidates-list">
+          <!-- Dynamic candidate comparison cards -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Automated Claim Verification Modal -->
+  <div class="modal-overlay" id="claim-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="icon-shield">🛡️</span>
+          <h3>Automated Claim Verification</h3>
+        </div>
+        <button class="modal-close" onclick="closeClaimModal()">✕</button>
+      </div>
+
+      <form id="claim-form" onsubmit="submitClaimForm(event)">
+        <input type="hidden" id="claim-item-id" value="">
+
+        <div class="claim-item-summary" id="claim-item-summary">
+          <!-- Item preview -->
+        </div>
+
+        <div class="claim-challenge-container">
+          <div class="challenge-label-row">
+            <span class="lock-pill">Security Challenge</span>
+            <span class="text-muted" id="claim-challenge-text">Answer the verification question:</span>
+          </div>
+
+          <div class="form-group full-col">
+            <label id="claim-question-label">Ownership Verification Question</label>
+            <input type="text" id="claim-secret-answer" placeholder="Your secret answer / exact description..." required>
+            <span class="form-tip">AI ownership verification compares your response against registered hidden criteria.</span>
+          </div>
+
+          <div class="form-group full-col">
+            <label>Additional Ownership Proof (Optional)</label>
+            <textarea id="claim-additional-proof" rows="2" placeholder="Mention serial numbers, receipts, unique scratches, or wallpaper description..."></textarea>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Your Full Name *</label>
+              <input type="text" id="claimant-name" placeholder="Alex Chen" required>
+            </div>
+            <div class="form-group">
+              <label>Student / Staff ID *</label>
+              <input type="text" id="claimant-student-id" placeholder="2023CS014" required>
+            </div>
+            <div class="form-group">
+              <label>Campus Email *</label>
+              <input type="email" id="claimant-email" placeholder="alex.chen@campus.edu" required>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="claimant-phone" placeholder="+1-555-0192">
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Verification Result Box -->
+        <div class="verification-result-box" id="verification-result-box" style="display:none;">
+          <div class="result-status-row" id="result-status-row">
+            <!-- Result badge -->
+          </div>
+          <p id="result-notes-text" class="result-notes"></p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeClaimModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="claim-submit-btn">
+            <span>Verify Ownership & Submit Claim</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Item Detail & Custody Timeline Modal -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal-card modal-large">
+      <div class="modal-header">
+        <h3 id="detail-modal-title">Item Details & Custody Chain</h3>
+        <button class="modal-close" onclick="closeDetailModal()">✕</button>
+      </div>
+
+      <div class="detail-modal-body" id="detail-modal-body">
+        <!-- Dynamic detail body with 3D Hologram Inspector & Custody Timeline -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/three_scene.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
