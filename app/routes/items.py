@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query
 from app.config import UPLOAD_DIR
-from app.models import ItemCreate, ItemResponse
+from app.models import ItemResponse
 from app.database import (
     insert_item, get_item, list_items, update_item_status,
     get_custody_history, insert_notification

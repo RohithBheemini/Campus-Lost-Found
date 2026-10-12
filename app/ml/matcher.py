@@ -1,6 +1,6 @@
 import math
 from datetime import datetime
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Dict, Any, List, Tuple
 from app.config import (
     CAMPUS_LOCATIONS,
     WEIGHT_CATEGORY,

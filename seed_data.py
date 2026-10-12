@@ -1,7 +1,5 @@
 import os
-import cv2
-import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 from app.config import SAMPLE_IMG_DIR
 from app.database import init_db, insert_item, list_items
 from app.ml.vision import analyze_image

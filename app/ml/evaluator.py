@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any
 from app.ml.matcher import match_items
 
 # Ground truth test pairs: (Lost Query, True Matching Found Item, Category)
@@ -257,7 +257,7 @@ def run_evaluation_benchmark() -> Dict[str, Any]:
     
     per_item_results = []
     
-    for idx, pair in enumerate(EVALUATION_PAIRS):
+    for pair in EVALUATION_PAIRS:
         query = pair["lost"]
         ground_truth_found = pair["found"]
         

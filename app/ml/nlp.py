@@ -1,8 +1,7 @@
 import re
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
 
 # Comprehensive campus brand dictionary
 CAMPUS_BRANDS = [
@@ -115,7 +114,6 @@ class NLPEngine:
             min_df=1,
             sublinear_tf=True
         )
-        self._fitted = False
 
     def extract_brand(self, text: str) -> Optional[str]:
         text_lower = text.lower()

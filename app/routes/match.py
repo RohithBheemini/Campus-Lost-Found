@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from app.database import get_item, list_items

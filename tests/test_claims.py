@@ -1,4 +1,3 @@
-import pytest
 from app.routes.claims import evaluate_claim_proof
 
 def test_claim_exact_secret_match():

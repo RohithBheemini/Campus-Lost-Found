@@ -1,4 +1,3 @@
-import pytest
 from app.ml.nlp import get_nlp_engine
 
 def test_brand_extraction():

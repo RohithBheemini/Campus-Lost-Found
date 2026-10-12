@@ -5,7 +5,7 @@ import cv2
 import torch
 import torch.nn as nn
 from PIL import Image
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Dict, Any, List, Tuple
 
 # Color reference palette in RGB and named equivalents
 NAMED_COLORS = {

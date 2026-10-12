@@ -1,12 +1,9 @@
-import os
 import numpy as np
-import pytest
 from app.ml.vision import (
     VisualEmbeddingNet,
     get_vision_model,
     closest_color_name,
     extract_dominant_colors,
-    compute_hsv_histogram,
     extract_shape_and_texture,
     analyze_image,
     compute_visual_similarity

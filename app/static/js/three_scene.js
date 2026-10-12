@@ -485,7 +485,6 @@ let clock = new THREE.Clock();
 function animateScene() {
   requestAnimationFrame(animateScene);
 
-  const delta = clock.getDelta();
   const time = clock.getElapsedTime();
 
   // Smooth camera interpolation (inertial damping)

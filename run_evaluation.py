@@ -1,5 +1,4 @@
 import sys
-import json
 
 # Ensure UTF-8 output on Windows consoles
 if hasattr(sys.stdout, "reconfigure"):

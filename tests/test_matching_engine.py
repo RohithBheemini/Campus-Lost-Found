@@ -1,4 +1,3 @@
-import pytest
 from app.ml.matcher import match_items, compute_spatiotemporal_score, compute_attribute_score
 
 def test_spatiotemporal_score():

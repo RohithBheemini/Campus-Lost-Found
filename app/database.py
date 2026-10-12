@@ -9,7 +9,6 @@ from app.config import DB_PATH
 _db_lock = threading.Lock()
 
 def get_db_connection():
-    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL;")
@@ -17,6 +16,7 @@ def get_db_connection():
 
 def init_db():
     with _db_lock:
+        os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
         conn = get_db_connection()
         cursor = conn.cursor()
         
@@ -167,6 +167,28 @@ def insert_item(item_data: Dict[str, Any]) -> int:
         conn.close()
         return item_id
 
+def _format_item_row(row: sqlite3.Row) -> Dict[str, Any]:
+    d = dict(row)
+    features = d.get("distinguishing_features")
+    if features:
+        try:
+            d["distinguishing_features"] = json.loads(features)
+        except Exception:
+            d["distinguishing_features"] = []
+    else:
+        d["distinguishing_features"] = []
+
+    emb = d.get("vision_embedding")
+    if emb:
+        try:
+            d["vision_embedding"] = json.loads(emb)
+        except Exception:
+            d["vision_embedding"] = None
+
+    d["vision_features_extracted"] = bool(d.get("vision_features_extracted", 0))
+    d["nlp_features_extracted"] = bool(d.get("nlp_features_extracted", 0))
+    return d
+
 def get_item(item_id: int) -> Optional[Dict[str, Any]]:
     with _db_lock:
         conn = get_db_connection()
@@ -174,24 +196,7 @@ def get_item(item_id: int) -> Optional[Dict[str, Any]]:
         cursor.execute("SELECT * FROM items WHERE id = ?", (item_id,))
         row = cursor.fetchone()
         conn.close()
-        if not row:
-            return None
-        d = dict(row)
-        if d.get("distinguishing_features"):
-            try:
-                d["distinguishing_features"] = json.loads(d["distinguishing_features"])
-            except Exception:
-                d["distinguishing_features"] = []
-        else:
-            d["distinguishing_features"] = []
-        if d.get("vision_embedding"):
-            try:
-                d["vision_embedding"] = json.loads(d["vision_embedding"])
-            except Exception:
-                d["vision_embedding"] = None
-        d["vision_features_extracted"] = bool(d.get("vision_features_extracted", 0))
-        d["nlp_features_extracted"] = bool(d.get("nlp_features_extracted", 0))
-        return d
+        return _format_item_row(row) if row else None
 
 def update_item_status(item_id: int, new_status: str, actor: str = "System", details: str = ""):
     with _db_lock:
@@ -244,26 +249,7 @@ def list_items(
         cursor.execute(query, params)
         rows = cursor.fetchall()
         conn.close()
-        
-        results = []
-        for row in rows:
-            d = dict(row)
-            if d.get("distinguishing_features"):
-                try:
-                    d["distinguishing_features"] = json.loads(d["distinguishing_features"])
-                except Exception:
-                    d["distinguishing_features"] = []
-            else:
-                d["distinguishing_features"] = []
-            d["vision_features_extracted"] = bool(d.get("vision_features_extracted", 0))
-            d["nlp_features_extracted"] = bool(d.get("nlp_features_extracted", 0))
-            if d.get("vision_embedding"):
-                try:
-                    d["vision_embedding"] = json.loads(d["vision_embedding"])
-                except Exception:
-                    d["vision_embedding"] = None
-            results.append(d)
-        return results
+        return [_format_item_row(row) for row in rows]
 
 def get_custody_history(item_id: int) -> List[Dict[str, Any]]:
     with _db_lock:

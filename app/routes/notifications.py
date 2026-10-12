@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from fastapi import APIRouter, HTTPException, Query
 from app.database import get_notifications, mark_notification_read
 

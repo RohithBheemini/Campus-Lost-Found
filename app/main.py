@@ -1,12 +1,10 @@
-import os
-from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 from app.database import init_db
-from app.config import BASE_DIR, UPLOAD_DIR, SAMPLE_IMG_DIR
+from app.config import BASE_DIR
 from app.routes.items import router as items_router
 from app.routes.match import router as match_router
 from app.routes.claims import router as claims_router
